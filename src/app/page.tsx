@@ -1,103 +1,144 @@
-import Image from "next/image";
+import React from 'react';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import {
+  Heart,
+  MapPin,
+  Star,
+  Calendar,
+  Image,
+  Camera,
+  Plane,
+} from 'lucide-react';
+import Link from 'next/link';
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className='min-h-screen'>
+      <Navbar />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Hero Section */}
+      <section className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-20'>
+        <div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8'>
+          {/* Header da Hero */}
+          <div className='text-center mb-16'>
+            <h1 className='text-5xl md:text-6xl font-bold text-gray-900 mb-6'>
+              Bem-vindos ao mundo do
+              <span className='text-gray-700 block mt-2'>Noah</span>
+            </h1>
+            <p className='text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed'>
+              Um espaço especial para guardar cada momento mágico, cada sorriso,
+              cada descoberta e cada aventura da nossa maior alegria.
+            </p>
+            <div className='flex justify-center items-center mt-6 space-x-2'>
+              <Star className='h-6 w-6 text-gray-400 fill-current' />
+              <Star className='h-6 w-6 text-gray-400 fill-current' />
+              <Star className='h-6 w-6 text-gray-400 fill-current' />
+            </div>
+          </div>
+
+          {/* Cards Principais - Formato Quadrado Lado a Lado */}
+          <div className='flex flex-col lg:flex-row gap-8 max-w-4xl mx-auto justify-center'>
+            {/* Card Álbum de Memórias */}
+            <div className='group flex-1 max-w-sm mx-auto lg:mx-0'>
+              <div className='bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden border border-gray-100 aspect-square flex flex-col'>
+                <div className='bg-gradient-to-br from-slate-700 to-slate-800 p-6 text-white relative overflow-hidden flex-1 flex flex-col justify-center'>
+                  <div className='absolute top-0 right-0 w-24 h-24 bg-white bg-opacity-10 rounded-full -mr-12 -mt-12'></div>
+                  <div className='absolute bottom-0 left-0 w-20 h-20 bg-white bg-opacity-5 rounded-full -ml-10 -mb-10'></div>
+                  <div className='text-center relative z-10'>
+                    <Heart className='h-12 w-12 mb-3 mx-auto text-gray-300' />
+                    <h2 className='text-2xl font-bold mb-2'>
+                      Álbum de Memórias
+                    </h2>
+                    <p className='text-gray-300 text-sm'>
+                      Momentos especiais organizados por idade
+                    </p>
+                  </div>
+                </div>
+                <div className='p-6 flex-1 flex flex-col justify-between'>
+                  <div className='space-y-3 mb-4'>
+                    <div className='flex items-center space-x-2 text-sm'>
+                      <Calendar className='h-4 w-4 text-slate-600' />
+                      <span className='text-gray-700'>Por ano de vida</span>
+                    </div>
+                    <div className='flex items-center space-x-2 text-sm'>
+                      <Image className='h-4 w-4 text-slate-600' />
+                      <span className='text-gray-700'>Fotos e trabalhos</span>
+                    </div>
+                  </div>
+                  <Link
+                    href='/memorias'
+                    className='w-full bg-slate-700 hover:bg-slate-800 text-white py-3 px-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-md text-sm text-center block'
+                  >
+                    Explorar Memórias
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Card Álbum de Viagens */}
+            <div className='group flex-1 max-w-sm mx-auto lg:mx-0'>
+              <div className='bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden border border-gray-100 aspect-square flex flex-col'>
+                <div className='bg-gradient-to-br from-slate-600 to-slate-700 p-6 text-white relative overflow-hidden flex-1 flex flex-col justify-center'>
+                  <div className='absolute top-0 right-0 w-24 h-24 bg-white bg-opacity-10 rounded-full -mr-12 -mt-12'></div>
+                  <div className='absolute bottom-0 left-0 w-20 h-20 bg-white bg-opacity-5 rounded-full -ml-10 -mb-10'></div>
+                  <div className='text-center relative z-10'>
+                    <MapPin className='h-12 w-12 mb-3 mx-auto text-gray-300' />
+                    <h2 className='text-2xl font-bold mb-2'>
+                      Álbum de Viagens
+                    </h2>
+                    <p className='text-gray-300 text-sm'>
+                      Aventuras pelo mundo em mapa interativo
+                    </p>
+                  </div>
+                </div>
+                <div className='p-6 flex-1 flex flex-col justify-between'>
+                  <div className='space-y-3 mb-4'>
+                    <div className='flex items-center space-x-2 text-sm'>
+                      <MapPin className='h-4 w-4 text-slate-600' />
+                      <span className='text-gray-700'>Mapa interativo</span>
+                    </div>
+                    <div className='flex items-center space-x-2 text-sm'>
+                      <Camera className='h-4 w-4 text-slate-600' />
+                      <span className='text-gray-700'>Álbuns por destino</span>
+                    </div>
+                  </div>
+                  <Link
+                    href='/viagens'
+                    className='w-full bg-slate-700 hover:bg-slate-800 text-white py-3 px-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-md text-sm text-center block'
+                  >
+                    Explorar Viagens
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Estatísticas */}
+          <div className='mt-20 text-center'>
+            <div className='grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto'>
+              <div className='bg-white rounded-xl p-6 shadow-md border border-gray-100'>
+                <div className='text-3xl font-bold text-slate-800'>0+</div>
+                <div className='text-gray-600 font-medium'>Fotos</div>
+              </div>
+              <div className='bg-white rounded-xl p-6 shadow-md border border-gray-100'>
+                <div className='text-3xl font-bold text-slate-800'>0+</div>
+                <div className='text-gray-600 font-medium'>Memórias</div>
+              </div>
+              <div className='bg-white rounded-xl p-6 shadow-md border border-gray-100'>
+                <div className='text-3xl font-bold text-slate-800'>0+</div>
+                <div className='text-gray-600 font-medium'>Viagens</div>
+              </div>
+              <div className='bg-white rounded-xl p-6 shadow-md border border-gray-100'>
+                <div className='text-3xl font-bold text-slate-800'>∞</div>
+                <div className='text-gray-600 font-medium'>Amor</div>
+              </div>
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      <Footer />
     </div>
   );
 }

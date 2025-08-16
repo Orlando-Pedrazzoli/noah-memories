@@ -1,26 +1,247 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    @apply bg-gray-50 text-gray-900;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .btn-primary {
+    @apply bg-slate-800 hover:bg-slate-900 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-3 rounded-lg font-semibold transition-colors duration-200;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl shadow-lg border border-gray-100 p-6;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-transparent outline-none transition-all duration-200;
+  }
+
+  /* Utility para truncar texto */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* Leaflet Map Styles */
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  border-radius: 1rem;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 0.5rem;
+}
+
+.leaflet-popup-content {
+  margin: 8px 12px;
+  line-height: 1.4;
+}
+
+.leaflet-popup-tip {
+  background: white;
+  border: none;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom Map Marker Styles */
+.custom-marker-wrapper {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.custom-marker {
+  font-size: 24px;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  user-select: none;
+}
+
+.custom-marker:hover {
+  transform: scale(1.1);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Loading Animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Hover Effects */
+.hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Focus States */
+.input-field:focus {
+  box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.1);
+}
+
+/* Memory Card Specific Styles */
+.memory-card-image {
+  transition: transform 0.3s ease;
+}
+
+.memory-card:hover .memory-card-image {
+  transform: scale(1.05);
+}
+
+/* Travel Map Container */
+.travel-map-container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Upload Drop Zone */
+.upload-drop-zone {
+  border: 2px dashed #d1d5db;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.upload-drop-zone:hover {
+  border-color: #6b7280;
+  background-color: #f9fafb;
+}
+
+.upload-drop-zone.drag-over {
+  border-color: #4f46e5;
+  background-color: #eef2ff;
+}
+
+/* Responsive Grid Helpers */
+@media (max-width: 640px) {
+  .card {
+    @apply p-4;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    @apply text-sm px-4 py-2;
+  }
+}
+
+/* Dark Mode Support (Future) */
+@media (prefers-color-scheme: dark) {
+  /* Deixar preparado para futuro modo escuro */
+  :root {
+    --bg-primary: #1f2937;
+    --text-primary: #f9fafb;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #e5e7eb !important;
+  }
+}
+
+/* Accessibility Improvements */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focus Visible for Better Accessibility */
+.focus-visible:focus {
+  outline: 2px solid #4f46e5;
+  outline-offset: 2px;
+}
+
+/* Animation for Page Transitions */
+.page-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Memory Age Badge Styles */
+.age-badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.age-badge-baby {
+  @apply bg-pink-100 text-pink-800;
+}
+
+.age-badge-toddler {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.age-badge-child {
+  @apply bg-green-100 text-green-800;
 }
