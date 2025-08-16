@@ -1,6 +1,3 @@
-// src/components/Navbar.tsx
-// =============================================================================
-
 'use client';
 import React, { useState } from 'react';
 import Link from 'next/link';
@@ -23,19 +20,33 @@ interface NavbarProps {
 
 export default function Navbar({ className = '' }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
   const router = useRouter();
 
   const handleLogout = async () => {
+    if (loggingOut) return;
+
+    setLoggingOut(true);
     try {
       const response = await fetch('/api/auth', {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
       if (response.ok) {
-        router.push('/login');
+        // Limpar qualquer cache
+        window.location.href = '/login';
+      } else {
+        console.error('Erro no logout');
+        alert('Erro ao fazer logout. Tente novamente.');
       }
     } catch (error) {
       console.error('Erro no logout:', error);
+      alert('Erro de conexão. Tente novamente.');
+    } finally {
+      setLoggingOut(false);
     }
   };
 
@@ -85,10 +96,15 @@ export default function Navbar({ className = '' }: NavbarProps) {
           <div className='hidden md:block'>
             <button
               onClick={handleLogout}
-              className='bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors duration-200'
+              disabled={loggingOut}
+              className='bg-slate-800 hover:bg-slate-900 disabled:bg-slate-400 text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors duration-200'
             >
-              <LogOut className='h-5 w-5' />
-              <span>Logout</span>
+              {loggingOut ? (
+                <div className='animate-spin rounded-full h-5 w-5 border-b-2 border-white'></div>
+              ) : (
+                <LogOut className='h-5 w-5' />
+              )}
+              <span>{loggingOut ? 'Saindo...' : 'Logout'}</span>
             </button>
           </div>
 
@@ -140,10 +156,15 @@ export default function Navbar({ className = '' }: NavbarProps) {
                   handleLogout();
                   setMobileMenuOpen(false);
                 }}
-                className='bg-slate-800 hover:bg-slate-900 text-white px-4 py-3 rounded-lg flex items-center space-x-3 font-medium transition-colors duration-200 w-full text-left'
+                disabled={loggingOut}
+                className='bg-slate-800 hover:bg-slate-900 disabled:bg-slate-400 text-white px-4 py-3 rounded-lg flex items-center space-x-3 font-medium transition-colors duration-200 w-full text-left'
               >
-                <LogOut className='h-5 w-5' />
-                <span>Logout</span>
+                {loggingOut ? (
+                  <div className='animate-spin rounded-full h-5 w-5 border-b-2 border-white'></div>
+                ) : (
+                  <LogOut className='h-5 w-5' />
+                )}
+                <span>{loggingOut ? 'Saindo...' : 'Logout'}</span>
               </button>
             </div>
           </div>

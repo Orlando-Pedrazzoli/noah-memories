@@ -1,9 +1,12 @@
-// src/components/UploadForm.tsx
-// =============================================================================
-
 'use client';
 import React, { useState } from 'react';
-import { Upload, Image as ImageIcon, X, Check } from 'lucide-react';
+import {
+  Upload,
+  Image as ImageIcon,
+  X,
+  Check,
+  AlertCircle,
+} from 'lucide-react';
 
 interface UploadFormProps {
   onUploadComplete?: (imageUrl: string) => void;
@@ -20,12 +23,43 @@ export default function UploadForm({
   const [uploading, setUploading] = useState(false);
   const [uploadedUrls, setUploadedUrls] = useState<string[]>([]);
   const [error, setError] = useState('');
+  const [uploadProgress, setUploadProgress] = useState<string>('');
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = Array.from(e.target.files || []);
 
+    console.log('Arquivos selecionados:', selectedFiles);
+
     if (files.length + selectedFiles.length > maxFiles) {
       setError(`Máximo ${maxFiles} arquivos permitidos`);
+      return;
+    }
+
+    // Validar tipos de arquivo
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const invalidFiles = selectedFiles.filter(
+      file => !allowedTypes.includes(file.type)
+    );
+
+    if (invalidFiles.length > 0) {
+      setError(
+        `Tipos de arquivo não permitidos: ${invalidFiles
+          .map(f => f.name)
+          .join(', ')}`
+      );
+      return;
+    }
+
+    // Validar tamanho (máximo 10MB)
+    const oversizedFiles = selectedFiles.filter(
+      file => file.size > 10 * 1024 * 1024
+    );
+    if (oversizedFiles.length > 0) {
+      setError(
+        `Arquivos muito grandes (máx. 10MB): ${oversizedFiles
+          .map(f => f.name)
+          .join(', ')}`
+      );
       return;
     }
 
@@ -42,20 +76,35 @@ export default function UploadForm({
 
     setUploading(true);
     setError('');
+    setUploadProgress('');
     const urls: string[] = [];
 
     try {
-      for (const file of files) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        setUploadProgress(`Enviando ${i + 1} de ${files.length}: ${file.name}`);
+
         const formData = new FormData();
         formData.append('file', file);
         formData.append('folder', folder);
+
+        console.log('Enviando arquivo:', file.name, 'para pasta:', folder);
 
         const response = await fetch('/api/upload', {
           method: 'POST',
           body: formData,
         });
 
+        console.log('Resposta do upload:', response.status);
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Erro na resposta:', errorText);
+          throw new Error(`Erro ${response.status}: ${errorText}`);
+        }
+
         const data = await response.json();
+        console.log('Dados recebidos:', data);
 
         if (data.success) {
           urls.push(data.imageUrl);
@@ -69,8 +118,11 @@ export default function UploadForm({
 
       setUploadedUrls(urls);
       setFiles([]);
+      setUploadProgress('');
     } catch (error) {
+      console.error('Erro no upload:', error);
       setError(error instanceof Error ? error.message : 'Erro no upload');
+      setUploadProgress('');
     } finally {
       setUploading(false);
     }
@@ -85,6 +137,7 @@ export default function UploadForm({
         <p className='text-sm text-gray-600'>
           Selecione até {maxFiles} imagens (JPG, PNG, WebP - máx. 10MB cada)
         </p>
+        <p className='text-xs text-gray-500 mt-1'>Pasta de destino: {folder}</p>
       </div>
 
       {/* Área de Upload */}
@@ -101,12 +154,19 @@ export default function UploadForm({
         />
         <label
           htmlFor='file-upload'
-          className='cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50'
+          className='cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50'
         >
           <ImageIcon className='h-5 w-5 mr-2' />
           Selecionar Imagens
         </label>
       </div>
+
+      {/* Progress */}
+      {uploadProgress && (
+        <div className='mt-4 bg-blue-50 border border-blue-200 rounded-lg p-3'>
+          <p className='text-blue-700 text-sm'>{uploadProgress}</p>
+        </div>
+      )}
 
       {/* Preview dos Arquivos */}
       {files.length > 0 && (
@@ -179,7 +239,15 @@ export default function UploadForm({
       {/* Erro */}
       {error && (
         <div className='mt-6 bg-red-50 border border-red-200 rounded-lg p-4'>
-          <p className='text-red-600 text-sm'>{error}</p>
+          <div className='flex items-start space-x-2'>
+            <AlertCircle className='h-5 w-5 text-red-500 flex-shrink-0 mt-0.5' />
+            <div>
+              <p className='text-red-600 text-sm font-medium'>
+                Erro no upload:
+              </p>
+              <p className='text-red-600 text-sm'>{error}</p>
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import TravelMap from '@/components/TravelMap';
 import {
   MapPin,
   Calendar,
@@ -12,34 +13,6 @@ import {
 import { Travel } from '@/types';
 import { formatDate } from '@/lib/utils';
 import Link from 'next/link';
-
-// Componente de Mapa Simples (placeholder)
-const TravelMap = ({
-  travels,
-  onMarkerClick,
-}: {
-  travels: Travel[];
-  onMarkerClick: (travel: Travel) => void;
-}) => {
-  return (
-    <div className='w-full h-96 bg-gray-200 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center'>
-      <div className='text-center'>
-        <MapPin className='h-12 w-12 text-gray-400 mx-auto mb-2' />
-        <p className='text-gray-600 font-medium'>Mapa Interativo</p>
-        <p className='text-sm text-gray-500'>
-          {travels.length > 0
-            ? `${travels.length} destino${
-                travels.length > 1 ? 's' : ''
-              } visitado${travels.length > 1 ? 's' : ''}`
-            : 'Nenhum destino ainda'}
-        </p>
-        <p className='text-xs text-gray-400 mt-2'>
-          Integração com Leaflet será implementada aqui
-        </p>
-      </div>
-    </div>
-  );
-};
 
 export default function ViagensPage() {
   const [travels, setTravels] = useState<Travel[]>([]);
@@ -116,6 +89,7 @@ export default function ViagensPage() {
                 <TravelMap
                   travels={travels}
                   onMarkerClick={handleMarkerClick}
+                  selectedTravel={selectedTravel}
                 />
               </div>
             </div>
@@ -146,7 +120,7 @@ export default function ViagensPage() {
                       key={travel._id}
                       className={`card cursor-pointer transition-all duration-200 ${
                         selectedTravel?._id === travel._id
-                          ? 'ring-2 ring-slate-500 shadow-lg'
+                          ? 'ring-2 ring-slate-500 shadow-lg bg-slate-50'
                           : 'hover:shadow-lg'
                       }`}
                       onClick={() => setSelectedTravel(travel)}
